@@ -19,4 +19,5 @@ uv run python main.py
 ```
 
 Edit `main.py` to uncomment the desired `ingest_*` call before running.
-# broccoli-dlt-test
+
+Data should be ingested as declared in `.dlt/secrets.toml`

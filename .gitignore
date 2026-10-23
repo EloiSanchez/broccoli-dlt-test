@@ -13,3 +13,7 @@ wheels/
 .env
 .dlt/secrets.toml
 data/
+
+# sqlmesh
+logs/
+.cache

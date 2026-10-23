@@ -1,0 +1,52 @@
+# --- Gateway Connection ---
+gateways:
+  broccoli:
+    connection:
+      # For more information on configuring the connection to your execution engine, visit:
+      # https://sqlmesh.readthedocs.io/en/stable/reference/configuration/#connection
+      # https://sqlmesh.readthedocs.io/en/stable/integrations/engines/duckdb/#connection-options
+      type: duckdb
+      catalogs:
+        # First catalog is the default catalog
+        broccoli:
+          type: ducklake
+          path: "data/broccoli.catalog"
+          data_path: "data/broccoli"
+          data_inlining_row_limit: 1000
+          metadata_schema: main
+
+        # Source catalog, where dlt ingests data. Set as read only
+        sources:
+          type: ducklake
+          path: "data/sources.catalog"
+          data_path: "data/sources"
+          read_only: true
+          # data_inlining_row_limit: 1000
+          metadata_schema: main
+          override_data_path: true
+    state_connection:
+      type: duckdb
+      database: data/sqlmesh_state.db
+
+default_gateway: broccoli
+
+# --- Model Defaults ---
+# https://sqlmesh.readthedocs.io/en/stable/reference/model_configuration/#model-defaults
+
+model_defaults:
+  dialect: duckdb
+  start: 2026-10-01 # Start date for backfill history
+  cron: "@daily" # Run models daily at 12am UTC (can override per model)
+
+# --- Linting Rules ---
+# Enforce standards for your team
+# https://sqlmesh.readthedocs.io/en/stable/guides/linter/
+
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections
+    - noselectstar
+    # - nomissingaudits
